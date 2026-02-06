@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập Liệu Kế Toán</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <!-- <script src="../assets/javascript/script.js"></script> -->
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Nhập số liệu </h2>
+        <form id="myForm">
+            <label>Tên sản phẩm:</label>
+            <input type="text" name="ten_san_pham" placeholder="" required>
+            
+            <label>Giá tiền:</label>
+            <input type="number" name="gia_tien" placeholder="" required>
+            
+            <button type="submit" id="btnSubmit">Lưu Dữ Liệu</button>
+        </form>
+        <div id="msg" class="thong-bao"></div>
+    </div>
+
+    <script>
+        // Phần xử lý gửi dữ liệu (Javascript)
+        const form = document.getElementById('myForm');
+        const msg = document.getElementById('msg');
+        const btn = document.getElementById('btnSubmit');
+
+        // QUAN TRỌNG: Dán cái link bạn copy ở Bước 1 vào giữa dấu ngoặc kép bên dưới
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxsTmaHS9sM2XxSIeAm4Ei2y2Ybe8HDpDVG5hQnXKsnIv0S9OXLq5f-AMwMXNJpqaLwpQ/exec"; 
+
+        form.addEventListener('submit', e => {
+            e.preventDefault(); // Ngăn web load lại trang
+            btn.disabled = true; // Khóa nút bấm để tránh bấm nhiều lần
+            btn.innerHTML = "Đang lưu...";
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    msg.innerHTML = "✅ Đã lưu thành công!";
+                    form.reset(); // Xóa trắng ô nhập để nhập tiếp
+                    btn.disabled = false;
+                    btn.innerHTML = "Lưu Dữ Liệu";
+                    // Tự động tắt thông báo sau 3 giây
+                    setTimeout(() => { msg.innerHTML = ""; }, 3000);
+                })
+                .catch(error => {
+                    msg.style.color = "red";
+                    msg.innerHTML = "❌ Lỗi! Kiểm tra lại mạng hoặc Link.";
+                    btn.disabled = false;
+                    btn.innerHTML = "Lưu Dữ Liệu";
+                });
+        });
+    </script>
+</body>
+
+</html>
